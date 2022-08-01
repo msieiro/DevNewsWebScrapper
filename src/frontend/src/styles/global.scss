@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;500;600;700&family=Indie+Flower&display=swap");
+
+:root {
+    --light-slate-gray: #77878b;
+    --dark-slate-gray: #305252;
+    --onyx: #373e40;
+    --steel-teal: #488286;
+    --powder-blue: #b7d5d4;
+    --border-radius: 10px;
+    --box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
+        0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inconsolata", monospace !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+a {
+    font-family: "Indie Flower", cursive !important;
+}
+
+a {
+    font-weight: bolder;
+    font-size: 1.2rem;
+}

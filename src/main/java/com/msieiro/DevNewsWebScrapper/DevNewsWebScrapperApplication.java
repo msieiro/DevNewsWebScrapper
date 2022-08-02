@@ -18,11 +18,9 @@ class DevNewsWebScrapperApplication {
 
 	@Bean
 	@Order(Ordered.HIGHEST_PRECEDENCE)
-	public WebDriver webDriver() {
-		/* WebDriverManager.chromedriver().setup(); */
+	WebDriver webDriver() {
 		final ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
-		options.setBinary("src/main/resources/lib/chromedriver");
 		return new ChromeDriver(options);
 	}
 

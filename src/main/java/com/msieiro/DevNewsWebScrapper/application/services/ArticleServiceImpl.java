@@ -20,8 +20,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
 
     @Transactional(readOnly = false)
-    public List<Article> saveAllArticles(final List<Article> articles) {
-        return articleRepository.saveAll(articles);
+    public List<ArticleDTO> saveAllArticles(final List<Article> articles) {
+        return articleRepository.saveAll(articles).stream().map(ArticleDTO::new).toList();
     }
 
     public List<ArticleDTO> getAllArticles() {

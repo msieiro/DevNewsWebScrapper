@@ -9,6 +9,6 @@ public interface ArticleService {
 
     List<ArticleDTO> getAllArticles();
 
-    List<Article> saveAllArticles(final List<Article> articles);
+    List<ArticleDTO> saveAllArticles(final List<Article> articles);
 
 }

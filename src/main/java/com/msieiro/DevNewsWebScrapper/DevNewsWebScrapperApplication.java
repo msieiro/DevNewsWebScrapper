@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-
 @SpringBootApplication
 class DevNewsWebScrapperApplication {
 
@@ -20,10 +18,11 @@ class DevNewsWebScrapperApplication {
 
 	@Bean
 	@Order(Ordered.HIGHEST_PRECEDENCE)
-	WebDriver webDriver() {
-		WebDriverManager.chromedriver().setup();
+	public WebDriver webDriver() {
+		/* WebDriverManager.chromedriver().setup(); */
 		final ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless");
+		options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
+		options.setBinary("src/main/resources/lib/chromedriver");
 		return new ChromeDriver(options);
 	}
 

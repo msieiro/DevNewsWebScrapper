@@ -89,9 +89,10 @@ class SeleniumExecutor {
 
     private void loadMidudevArticles() {
         WebDriverManager.chromedriver().setup();
-        final ChromeOptions options = new ChromeOptions();
+        final WebDriver driver = WebDriverManager.chromedriver().create();
+        /* final ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
-        final WebDriver driver = new ChromeDriver(options);
+        final WebDriver driver = new ChromeDriver(options); */
         final Person midudev = personaService.getPersonByName("midudev");
         final List<Article> miduArticles = midudev.getArticles();
 

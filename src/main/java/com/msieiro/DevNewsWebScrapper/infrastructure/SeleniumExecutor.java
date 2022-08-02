@@ -19,16 +19,24 @@ import com.msieiro.DevNewsWebScrapper.domain.Article;
 import com.msieiro.DevNewsWebScrapper.domain.Person;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 class SeleniumExecutor {
 
     private final PersonaService personaService;
     private final ArticleService articleService;
+    private final WebDriver driver;
+
+    public SeleniumExecutor(final PersonaService personaService, final ArticleService articleService) {
+        WebDriverManager.chromedriver().setup();
+        this.personaService = personaService;
+        this.articleService = articleService;
+        final ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        this.driver = new ChromeDriver(options);
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional(readOnly = false)
@@ -88,11 +96,12 @@ class SeleniumExecutor {
     }
 
     private void loadMidudevArticles() {
-        WebDriverManager.chromedriver().setup();
-        final WebDriver driver = WebDriverManager.chromedriver().create();
-        /* final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        final WebDriver driver = new ChromeDriver(options); */
+        /*
+         * final ChromeOptions options = new ChromeOptions();
+         * options.addArguments("--headless");
+         * final WebDriver driver = new ChromeDriver(options);
+         */
+
         final Person midudev = personaService.getPersonByName("midudev");
         final List<Article> miduArticles = midudev.getArticles();
 

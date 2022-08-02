@@ -6,8 +6,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -18,25 +16,17 @@ import com.msieiro.DevNewsWebScrapper.application.PersonaService;
 import com.msieiro.DevNewsWebScrapper.domain.Article;
 import com.msieiro.DevNewsWebScrapper.domain.Person;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 class SeleniumExecutor {
 
     private final PersonaService personaService;
     private final ArticleService articleService;
     private final WebDriver driver;
-
-    public SeleniumExecutor(final PersonaService personaService, final ArticleService articleService) {
-        WebDriverManager.chromedriver().setup();
-        this.personaService = personaService;
-        this.articleService = articleService;
-        final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        this.driver = new ChromeDriver(options);
-    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional(readOnly = false)

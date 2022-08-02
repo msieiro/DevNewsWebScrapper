@@ -1,13 +1,14 @@
 package com.msieiro.DevNewsWebScrapper;
 
+import java.io.IOException;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ClassPathResource;
 
 @SpringBootApplication
 class DevNewsWebScrapperApplication {
@@ -17,9 +18,9 @@ class DevNewsWebScrapperApplication {
 	}
 
 	@Bean
-	@Order(Ordered.HIGHEST_PRECEDENCE)
-	WebDriver webDriver() {
-		System.setProperty("webdriver.chrome.driver", "/src/main/resources/lib/chromedriver");
+	WebDriver webDriver() throws IOException {
+		System.setProperty("webdriver.chrome.driver",
+				new ClassPathResource("src/main/resources/lib/chromedriver").getPath());
 		final ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
 		return new ChromeDriver(options);

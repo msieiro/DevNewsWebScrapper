@@ -19,8 +19,10 @@ class DevNewsWebScrapperApplication {
 
 	@Bean
 	WebDriver webDriver() throws IOException {
+		final ClassPathResource resource = new ClassPathResource("src/main/resources/lib/chromedriver");
+		resource.getFile().setExecutable(true);
 		System.setProperty("webdriver.chrome.driver",
-				new ClassPathResource("src/main/resources/lib/chromedriver").getPath());
+				resource.getPath());
 		final ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
 		return new ChromeDriver(options);

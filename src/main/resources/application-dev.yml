@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
     driverClassName: org.postgresql.Driver
     hikari:
       connectionTimeout: 20000
@@ -22,15 +24,3 @@ logging:
     root: INFO
     web: DEBUG
     com.msieiro.DevNewsWebScrapper: DEBUG
-bucket4j:
-  enabled: true
-  filters:
-    - cache-name: buckets
-      url: /*
-      rate-limits:
-        - bandwidths:
-            - capacity: 5
-              time: 10
-              unit: seconds
-server:
-  port: ${PORT:8080}

@@ -46,7 +46,8 @@
         "@typescript-eslint/parser": "4.9.1"
     },
     "scripts": {
-        "build": "next build && next export -o ..\\main\\resources\\static",
+        "build": "next build",
+        "build:prod": "next build && next export -o ../main/resources/static",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run --config video=false",
         "cypress:test": "start-server-and-test start http://localhost:3000 cypress:run",

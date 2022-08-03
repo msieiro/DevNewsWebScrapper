@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_API_URL = "http://localhost/";
+const BASE_API_URL = "https://dev-news-web-scrapper.herokuapp.com/";
 
 const API_URL = "/api/v1/articles";
 

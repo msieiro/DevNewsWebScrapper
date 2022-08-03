@@ -22,3 +22,5 @@ logging:
     root: INFO
     web: DEBUG
     com.msieiro.DevNewsWebScrapper: DEBUG
+server:
+  port: ${PORT:8080}

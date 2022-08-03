@@ -6,6 +6,8 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,6 @@ class SeleniumExecutor {
 
     private final PersonaService personaService;
     private final ArticleService articleService;
-    private final WebDriver driver;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional(readOnly = false)
@@ -86,11 +87,9 @@ class SeleniumExecutor {
     }
 
     private void loadMidudevArticles() {
-        /*
-         * final ChromeOptions options = new ChromeOptions();
-         * options.addArguments("--headless");
-         * final WebDriver driver = new ChromeDriver(options);
-         */
+        final ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        final WebDriver driver = new ChromeDriver(options);
 
         final Person midudev = personaService.getPersonByName("midudev");
         final List<Article> miduArticles = midudev.getArticles();

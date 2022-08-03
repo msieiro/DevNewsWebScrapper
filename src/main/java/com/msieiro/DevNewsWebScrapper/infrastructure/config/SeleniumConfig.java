@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class SeleniumConfig {
 
-    @Bean
+    /* @Bean
     WebDriver webDriver() throws IOException {
         final File resource = new File("./lib/chromedriver");
         resource.setExecutable(true);
@@ -28,5 +28,5 @@ public class SeleniumConfig {
         final ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
         return new ChromeDriver(options);
-    }
+    } */
 }

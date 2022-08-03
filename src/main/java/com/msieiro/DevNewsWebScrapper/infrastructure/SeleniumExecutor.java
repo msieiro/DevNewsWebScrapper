@@ -18,6 +18,7 @@ import com.msieiro.DevNewsWebScrapper.application.PersonaService;
 import com.msieiro.DevNewsWebScrapper.domain.Article;
 import com.msieiro.DevNewsWebScrapper.domain.Person;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -87,6 +88,7 @@ class SeleniumExecutor {
     }
 
     private void loadMidudevArticles() {
+        WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         final WebDriver driver = new ChromeDriver(options);

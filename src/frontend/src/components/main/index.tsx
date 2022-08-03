@@ -28,7 +28,7 @@ export const Main: FC = () => {
     }, []);
 
     if (error && error?.message) {
-        return <div>Error: {error.message}</div>;
+        return <div>🛑 Ooops! {error.message} 🛑</div>;
     }
 
     if (!isLoaded) {
@@ -74,7 +74,10 @@ export const Main: FC = () => {
                                                     src={article.owner.logo}
                                                     className="w-full"
                                                 />
-                                                <a href={article.url}>
+                                                <a
+                                                    href={article.url}
+                                                    target="_blank"
+                                                >
                                                     <div
                                                         className="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed opacity-0 hover:opacity-100 transition duration-300 ease-in-out"
                                                         style={{
@@ -107,6 +110,7 @@ export const Main: FC = () => {
                                                             article.owner
                                                                 .website
                                                         }
+                                                        target="_blank"
                                                     >
                                                         {article.owner.name}
                                                     </a>
@@ -119,6 +123,7 @@ export const Main: FC = () => {
                                                 }}
                                                 href={article.url}
                                                 className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md font-bold leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                                                target="_blank"
                                             >
                                                 Saber más
                                             </a>

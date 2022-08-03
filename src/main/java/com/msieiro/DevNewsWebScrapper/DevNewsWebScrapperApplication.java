@@ -26,7 +26,7 @@ class DevNewsWebScrapperApplication {
 		resource.getFile().setExecutable(true);
 		log.info("RESOURCE IS FILE ? {}", resource.isFile());
 		log.info("RESOURCE IS EXECUTABLE ? {}", resource.getFile().canExecute());
-		log.info("RESOURCE URL ? {}", resource.getURL());
+		log.info("RESOURCE URL ? {}", resource.getPath());
 		System.setProperty("webdriver.chrome.driver",
 				resource.getPath());
 		final ChromeOptions options = new ChromeOptions();

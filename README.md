@@ -5,7 +5,7 @@ Bienvenid@!
 Este simplemente es un visualizador de titulares, para poder leer el artículo completo visite la web del autor.
 
 - [x] [midudev](https://midu.dev/)
-- [ ] [James Sinclair](https://jrsinclair.com/)
+- [x] [James Sinclair](https://jrsinclair.com/)
 - [ ] [Nicolás Schurmann](https://www.nicolas-schurmann.com/)
 - [ ] [Baeldung](https://www.baeldung.com/)
 - [ ] [Smashing Magazine](https://www.smashingmagazine.com/articles/)

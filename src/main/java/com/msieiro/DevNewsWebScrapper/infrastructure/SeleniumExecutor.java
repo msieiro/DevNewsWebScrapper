@@ -33,12 +33,15 @@ class SeleniumExecutor {
     protected void loadDB() {
         WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.addArguments(
+                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
+        options.addArguments("--start-maximized");
         final WebDriver driver = new ChromeDriver(options);
 
         loadPersonasInDB();
         loadMidudevArticles(driver);
         loadJamesSinclairArticles(driver);
+        loadBaeldungArticles(driver);
 
         driver.quit();
     }
@@ -64,9 +67,13 @@ class SeleniumExecutor {
                  */
                 add(Person.builder()
                         .name("Baeldung")
-                        .website("https://www.baeldung.com/")
-                        .logo(
-                                "https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
+                        .website("https://www.baeldung.com/full_archive")
+                        .logo("https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
+                        .build());
+                add(Person.builder()
+                        .name("spring.io")
+                        .website("https://spring.io/blog")
+                        .logo("https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png")
                         .build());
                 add(Person.builder()
                         .name("Smashing Magazine")
@@ -148,6 +155,45 @@ class SeleniumExecutor {
             log.info("ADDED ALL ARTICLES TO DATABASE");
         } catch (final Exception e) {
             log.error("Error with SeleniumExecutor.loadJamesSinclairArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadBaeldungArticles(final WebDriver driver) {
+        final Person baeldung = personaService.getPersonByName("Baeldung");
+        final List<Article> baeldungArticles = baeldung.getArticles();
+
+        try {
+            driver.get(baeldung.getWebsite());
+
+            final List<WebElement> baeldungArchiveList = driver
+                    .findElement(By.className("bca-archive__monthlisting")).findElements(By.tagName("li"));
+
+            for (int i = 0; i < baeldungArchiveList.size(); i++) {
+                final WebElement article = baeldungArchiveList.get(i);
+
+                baeldungArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("a"))
+                                .getText())
+                        .date("unknown")
+                        .url(article.findElement(By.tagName("a")).getAttribute("href"))
+                        .owner(baeldung)
+                        .build());
+            }
+
+            baeldungArticles.forEach(article -> {
+                driver.get(article.getUrl());
+                article.setDate(driver.findElement(By.className("updated")).getText());
+                log.info("New date {} for article with id {}", driver.findElement(By.className("updated")).getText(),
+                        article.getId());
+            });
+
+            articleService.saveAllArticles(baeldungArticles);
+
+            log.info("ADDED ALL ARTICLES TO DATABASE");
+
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadBaeldungArticles: {}",
                     e.getMessage());
         }
     }

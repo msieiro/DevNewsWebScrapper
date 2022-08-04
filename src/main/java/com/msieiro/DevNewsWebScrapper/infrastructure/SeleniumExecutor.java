@@ -184,8 +184,6 @@ class SeleniumExecutor {
             baeldungArticles.forEach(article -> {
                 driver.get(article.getUrl());
                 article.setDate(driver.findElement(By.className("updated")).getText());
-                log.info("New date {} for article with id {}", driver.findElement(By.className("updated")).getText(),
-                        article.getId());
             });
 
             articleService.saveAllArticles(baeldungArticles);

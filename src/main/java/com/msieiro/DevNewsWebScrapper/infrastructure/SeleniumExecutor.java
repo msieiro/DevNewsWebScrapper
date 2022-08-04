@@ -11,7 +11,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.msieiro.DevNewsWebScrapper.application.ArticleService;
 import com.msieiro.DevNewsWebScrapper.application.PersonaService;
@@ -31,10 +30,17 @@ class SeleniumExecutor {
     private final ArticleService articleService;
 
     @EventListener(ApplicationReadyEvent.class)
-    @Transactional(readOnly = false)
     protected void loadDB() {
+        WebDriverManager.chromedriver().setup();
+        final ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        final WebDriver driver = new ChromeDriver(options);
+
         loadPersonasInDB();
-        loadMidudevArticles();
+        loadMidudevArticles(driver);
+        loadJamesSinclairArticles(driver);
+
+        driver.quit();
     }
 
     private void loadPersonasInDB() {
@@ -59,7 +65,8 @@ class SeleniumExecutor {
                 add(Person.builder()
                         .name("Baeldung")
                         .website("https://www.baeldung.com/")
-                        .logo("https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
+                        .logo(
+                                "https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
                         .build());
                 add(Person.builder()
                         .name("Smashing Magazine")
@@ -74,7 +81,8 @@ class SeleniumExecutor {
                 add(Person.builder()
                         .name("web.dev")
                         .website("https://web.dev/blog/")
-                        .logo("https://web-dev.imgix.net/image/FNkVSAX8UDTTQWQkKftSgGe9clO2/uZ3hQS2EPrA9csOgkoXI.png?auto=format&fit=max&w=1200&fm=auto")
+                        .logo(
+                                "https://web-dev.imgix.net/image/FNkVSAX8UDTTQWQkKftSgGe9clO2/uZ3hQS2EPrA9csOgkoXI.png?auto=format&fit=max&w=1200&fm=auto")
                         .build());
                 add(Person.builder()
                         .name("freeCodeCamp")
@@ -87,12 +95,7 @@ class SeleniumExecutor {
         log.info("ADDED ALL PERSONS TO DATABASE");
     }
 
-    private void loadMidudevArticles() {
-        WebDriverManager.chromedriver().setup();
-        final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        final WebDriver driver = new ChromeDriver(options);
-
+    private void loadMidudevArticles(final WebDriver driver) {
         final Person midudev = personaService.getPersonByName("midudev");
         final List<Article> miduArticles = midudev.getArticles();
 
@@ -108,7 +111,7 @@ class SeleniumExecutor {
                                 .getText())
                         .date(article.findElement(By.tagName("time"))
                                 .getText())
-                        .url(miduWebArticles.get(i).getAttribute("href"))
+                        .url(article.getAttribute("href"))
                         .owner(midudev)
                         .build());
             }
@@ -116,10 +119,36 @@ class SeleniumExecutor {
             articleService.saveAllArticles(miduArticles);
             log.info("ADDED ALL ARTICLES TO DATABASE");
         } catch (final Exception e) {
-            log.error("Error with SeleniumExecutor.loadMidudevArticles: {}", e.getCause().getMessage());
-        } finally {
-            driver.quit();
-            log.info("QUITTING SELENIUM DRIVER");
+            log.error("Error with SeleniumExecutor.loadMidudevArticles: {}", e.getMessage());
+        }
+    }
+
+    private void loadJamesSinclairArticles(final WebDriver driver) {
+        final Person jSinclair = personaService.getPersonByName("James Sinclair");
+        final List<Article> jSinclairArticles = jSinclair.getArticles();
+        try {
+            driver.get(jSinclair.getWebsite());
+
+            final List<WebElement> jSinclairWebArticles = driver
+                    .findElements(By.className("ArticleList-item"));
+
+            for (int i = 0; i < 6; i++) {
+                final WebElement article = jSinclairWebArticles.get(i);
+                jSinclairArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("h2")).findElement((By.tagName("a")))
+                                .getText())
+                        .date(article.findElement(By.tagName("time"))
+                                .getText())
+                        .url(article.findElement(By.tagName("h2")).findElement((By.tagName("a"))).getAttribute("href"))
+                        .owner(jSinclair)
+                        .build());
+            }
+
+            articleService.saveAllArticles(jSinclairArticles);
+            log.info("ADDED ALL ARTICLES TO DATABASE");
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadJamesSinclairArticles: {}",
+                    e.getMessage());
         }
     }
 }

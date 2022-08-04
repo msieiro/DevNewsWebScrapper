@@ -34,6 +34,9 @@ class SeleniumExecutor {
         WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
         //options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
+        options.addArguments(
+                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
+        options.addArguments("--start-maximized");
         final WebDriver driver = new ChromeDriver(options);
 
         loadPersonasInDB();
@@ -68,6 +71,12 @@ class SeleniumExecutor {
                         .website("https://www.baeldung.com/full_archive")
                         .logo(
                                 "https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
+                        .build());
+                add(Person.builder()
+                        .name("spring.io")
+                        .website("https://spring.io/blog")
+                        .logo(
+                                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png")
                         .build());
                 add(Person.builder()
                         .name("Smashing Magazine")

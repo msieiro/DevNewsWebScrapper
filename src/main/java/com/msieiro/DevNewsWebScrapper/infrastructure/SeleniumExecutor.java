@@ -33,7 +33,6 @@ class SeleniumExecutor {
     protected void loadDB() {
         WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
         options.addArguments(
                 "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
         options.addArguments("--start-maximized");
@@ -69,14 +68,12 @@ class SeleniumExecutor {
                 add(Person.builder()
                         .name("Baeldung")
                         .website("https://www.baeldung.com/full_archive")
-                        .logo(
-                                "https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
+                        .logo("https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
                         .build());
                 add(Person.builder()
                         .name("spring.io")
                         .website("https://spring.io/blog")
-                        .logo(
-                                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png")
+                        .logo("https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/2560px-Spring_Framework_Logo_2018.svg.png")
                         .build());
                 add(Person.builder()
                         .name("Smashing Magazine")
@@ -169,36 +166,32 @@ class SeleniumExecutor {
         try {
             driver.get(baeldung.getWebsite());
 
-            /* driver.findElement(By.xpath("//*[@id='qc-cmp2-ui']/div[2]/div/button[2]")).click(); */
-
             final List<WebElement> baeldungArchiveList = driver
-                    .findElement(By.className("bca-archive__list")).findElements(By.tagName("li"));
+                    .findElement(By.className("bca-archive__monthlisting")).findElements(By.tagName("li"));
 
-            // final List<WebElement> baeldungArchiveList2 =
-            // baeldungArchiveList.findElements(By.cssSelector(".bca-archive__monthlisting"));
+            for (int i = 0; i < baeldungArchiveList.size(); i++) {
+                final WebElement article = baeldungArchiveList.get(i);
 
-            log.info("founded monthlisting, with size : {}", baeldungArchiveList.size());
+                baeldungArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("a"))
+                                .getText())
+                        .date("unknown")
+                        .url(article.findElement(By.tagName("a")).getAttribute("href"))
+                        .owner(baeldung)
+                        .build());
+            }
 
-            /*
-             * final List<WebElement> baeldungArchiveListItems = baeldungArchiveList.get(0)
-             * .findElements(By.tagName("li"));
-             *
-             * log.info("founded lis");
-             *
-             * for (int i = 0; i < baeldungArchiveListItems.size(); i++) {
-             * final WebElement article = baeldungArchiveListItems.get(i);
-             * baeldungArticles.add(Article.builder()
-             * .title(article.findElement(By.tagName("a"))
-             * .getText())
-             * .date("unknown")
-             * .url(article.findElement(By.tagName("a")).getAttribute("href"))
-             * .owner(baeldung)
-             * .build());
-             * }
-             *
-             * articleService.saveAllArticles(baeldungArticles);
-             * log.info("ADDED ALL ARTICLES TO DATABASE");
-             */
+            baeldungArticles.forEach(article -> {
+                driver.get(article.getUrl());
+                article.setDate(driver.findElement(By.className("updated")).getText());
+                log.info("New date {} for article with id {}", driver.findElement(By.className("updated")).getText(),
+                        article.getId());
+            });
+
+            articleService.saveAllArticles(baeldungArticles);
+
+            log.info("ADDED ALL ARTICLES TO DATABASE");
+
         } catch (final Exception e) {
             log.error("Error with SeleniumExecutor.loadBaeldungArticles: {}",
                     e.getMessage());

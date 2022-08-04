@@ -160,7 +160,7 @@ class SeleniumExecutor {
         try {
             driver.get(baeldung.getWebsite());
 
-            driver.findElement(By.xpath("//*[@id='qc-cmp2-ui']/div[2]/div/button[2]")).click();
+            /* driver.findElement(By.xpath("//*[@id='qc-cmp2-ui']/div[2]/div/button[2]")).click(); */
 
             final List<WebElement> baeldungArchiveList = driver
                     .findElement(By.className("bca-archive__list")).findElements(By.tagName("li"));

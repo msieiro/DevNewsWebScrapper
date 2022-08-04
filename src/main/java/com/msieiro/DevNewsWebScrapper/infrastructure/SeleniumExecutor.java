@@ -33,12 +33,13 @@ class SeleniumExecutor {
     protected void loadDB() {
         WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        //options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
         final WebDriver driver = new ChromeDriver(options);
 
         loadPersonasInDB();
         loadMidudevArticles(driver);
         loadJamesSinclairArticles(driver);
+        loadBaeldungArticles(driver);
 
         driver.quit();
     }
@@ -64,7 +65,7 @@ class SeleniumExecutor {
                  */
                 add(Person.builder()
                         .name("Baeldung")
-                        .website("https://www.baeldung.com/")
+                        .website("https://www.baeldung.com/full_archive")
                         .logo(
                                 "https://media-exp1.licdn.com/dms/image/C561BAQE-eTcygnAyIA/company-background_10000/0/1555304127962?e=2147483647&v=beta&t=OrfN0EC9zz5hnJhyw9scYew49uVFqcAG1d7zC43tgXc")
                         .build());
@@ -148,6 +149,49 @@ class SeleniumExecutor {
             log.info("ADDED ALL ARTICLES TO DATABASE");
         } catch (final Exception e) {
             log.error("Error with SeleniumExecutor.loadJamesSinclairArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadBaeldungArticles(final WebDriver driver) {
+        final Person baeldung = personaService.getPersonByName("Baeldung");
+        final List<Article> baeldungArticles = baeldung.getArticles();
+
+        try {
+            driver.get(baeldung.getWebsite());
+
+            driver.findElement(By.xpath("//*[@id='qc-cmp2-ui']/div[2]/div/button[2]")).click();
+
+            final List<WebElement> baeldungArchiveList = driver
+                    .findElement(By.className("bca-archive__list")).findElements(By.tagName("li"));
+
+            // final List<WebElement> baeldungArchiveList2 =
+            // baeldungArchiveList.findElements(By.cssSelector(".bca-archive__monthlisting"));
+
+            log.info("founded monthlisting, with size : {}", baeldungArchiveList.size());
+
+            /*
+             * final List<WebElement> baeldungArchiveListItems = baeldungArchiveList.get(0)
+             * .findElements(By.tagName("li"));
+             *
+             * log.info("founded lis");
+             *
+             * for (int i = 0; i < baeldungArchiveListItems.size(); i++) {
+             * final WebElement article = baeldungArchiveListItems.get(i);
+             * baeldungArticles.add(Article.builder()
+             * .title(article.findElement(By.tagName("a"))
+             * .getText())
+             * .date("unknown")
+             * .url(article.findElement(By.tagName("a")).getAttribute("href"))
+             * .owner(baeldung)
+             * .build());
+             * }
+             *
+             * articleService.saveAllArticles(baeldungArticles);
+             * log.info("ADDED ALL ARTICLES TO DATABASE");
+             */
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadBaeldungArticles: {}",
                     e.getMessage());
         }
     }

@@ -73,6 +73,10 @@ export const Main: FC = () => {
                                                 <img
                                                     src={article.owner.logo}
                                                     className="w-full"
+                                                    style={{
+                                                        height: "100px",
+                                                        maxWidth: "150px",
+                                                    }}
                                                 />
                                                 <a
                                                     href={article.url}

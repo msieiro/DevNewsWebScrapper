@@ -1,6 +1,7 @@
 package com.msieiro.DevNewsWebScrapper.domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Article implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String title;
-    private String date;
+    private LocalDate date;
     private String url;
 
     @ManyToOne

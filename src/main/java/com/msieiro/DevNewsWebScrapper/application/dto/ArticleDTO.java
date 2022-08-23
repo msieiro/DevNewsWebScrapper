@@ -18,7 +18,7 @@ public class ArticleDTO {
     public ArticleDTO(final Article article) {
         this.id = article.getId();
         this.title = article.getTitle();
-        this.date = article.getDate();
+        this.date = article.getDate().toString();
         this.url = article.getUrl();
         this.owner = new PersonDTO(article.getOwner());
     }

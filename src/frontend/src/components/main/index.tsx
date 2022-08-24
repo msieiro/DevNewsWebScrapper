@@ -74,7 +74,7 @@ export const Main: FC = () => {
                                                     src={article.owner.logo}
                                                     className="w-full"
                                                     style={{
-                                                        height: "100px",
+                                                        height: "75px",
                                                         maxWidth: "150px",
                                                     }}
                                                 />

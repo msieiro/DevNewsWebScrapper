@@ -11,6 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import com.msieiro.DevNewsWebScrapper.application.ArticleService;
@@ -36,8 +38,8 @@ class SeleniumExecutor {
         WebDriverManager.chromedriver().setup();
         final ChromeOptions options = new ChromeOptions();
         options.addArguments(
-                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
-        options.addArguments("--start-maximized");
+                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
+        options.addArguments("--headless");
         final WebDriver driver = new ChromeDriver(options);
 
         loadPersonasInDB();
@@ -52,6 +54,7 @@ class SeleniumExecutor {
         loadReflectoringArticles(driver);
         loadAhmadShadeedArticles(driver);
         loadCSSTricksArticles(driver);
+
         driver.quit();
     }
 
@@ -129,6 +132,7 @@ class SeleniumExecutor {
         log.info("ADDED ALL PERSONS TO DATABASE");
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadMidudevArticles(final WebDriver driver) {
         final Person midudev = personaService.getPersonByName("midudev");
         final List<Article> miduArticles = new ArrayList<>();
@@ -157,6 +161,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadJamesSinclairArticles(final WebDriver driver) {
         final Person jSinclair = personaService.getPersonByName("James Sinclair");
         final List<Article> jSinclairArticles = new ArrayList<>();
@@ -186,6 +191,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadBaeldungArticles(final WebDriver driver) {
         final Person baeldung = personaService.getPersonByName("Baeldung");
         final List<Article> baeldungArticles = new ArrayList<>();
@@ -224,6 +230,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadNicolasSchurmannArticles(final WebDriver driver) {
         final Person nicolas = personaService.getPersonByName("Nicolas Schurmann");
         final List<Article> nicolasArticles = new ArrayList<>();
@@ -263,6 +270,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadSmashingMagazineArticles(final WebDriver driver) {
         final Person smashingMagazine = personaService.getPersonByName("Smashing Magazine");
         final List<Article> smashingMagazineArticles = new ArrayList<>();
@@ -302,6 +310,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadWebDevArticles(final WebDriver driver) {
         final Person webDev = personaService.getPersonByName("web.dev");
         final List<Article> webDevArticles = new ArrayList<>();
@@ -341,6 +350,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadFreeCodeCampArticles(final WebDriver driver) {
         final Person freeCodeCamp = personaService.getPersonByName("freeCodeCamp");
         final List<Article> freeCodeCampArticles = new ArrayList<>();
@@ -381,6 +391,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadReflectoringArticles(final WebDriver driver) {
         final Person reflectoring = personaService.getPersonByName("Reflectoring");
         final List<Article> reflectoringArticles = new ArrayList<>();
@@ -415,6 +426,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadAhmadShadeedArticles(final WebDriver driver) {
         final Person ahmadShadeed = personaService.getPersonByName("Ahmad Shadeed");
         final List<Article> ahmadShadeedArticles = new ArrayList<>();
@@ -447,6 +459,7 @@ class SeleniumExecutor {
         }
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     private void loadCSSTricksArticles(final WebDriver driver) {
         final Person cssTricks = personaService.getPersonByName("CSS-Tricks");
         final List<Article> cssTricksArticles = new ArrayList<>();

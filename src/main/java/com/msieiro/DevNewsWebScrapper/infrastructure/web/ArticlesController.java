@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/articles")
 @RequiredArgsConstructor
-@CrossOrigin(value = "http://localhost:3000/")
+@CrossOrigin(value = "https://dev-news-web-scrapper.herokuapp.com/")
 class ArticlesController {
 
     private final ArticleService articleService;

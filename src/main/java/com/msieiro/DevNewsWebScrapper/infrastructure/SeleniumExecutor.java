@@ -250,8 +250,7 @@ class SeleniumExecutor {
                 driver.get(article.getUrl());
                 article.setDate(
                         DateUtils.parseStringDateToLocalDate3(
-                                driver.findElement(By.className("content")).findElement(By.tagName("div"))
-                                        .findElement(By.tagName("div")).findElement(By.tagName("p")).getText()));
+                                driver.findElement(By.cssSelector("p[class*='blog-post__']")).getText()));
             });
 
             articleService.saveAllArticles(nicolasArticles);

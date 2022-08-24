@@ -10,9 +10,7 @@ import com.msieiro.DevNewsWebScrapper.domain.Person;
 import com.msieiro.DevNewsWebScrapper.domain.repository.PersonRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true, rollbackFor = Exception.class)

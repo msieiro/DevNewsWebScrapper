@@ -1,7 +1,6 @@
 package com.msieiro.DevNewsWebScrapper.infrastructure;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import com.msieiro.DevNewsWebScrapper.application.ArticleService;
 import com.msieiro.DevNewsWebScrapper.application.PersonaService;
 import com.msieiro.DevNewsWebScrapper.domain.Article;
 import com.msieiro.DevNewsWebScrapper.domain.Person;
+import com.msieiro.DevNewsWebScrapper.domain.utils.DateUtils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.RequiredArgsConstructor;
@@ -48,101 +48,11 @@ class SeleniumExecutor {
         loadNicolasSchurmannArticles(driver);
         loadSmashingMagazineArticles(driver);
         loadWebDevArticles(driver);
-
+        loadFreeCodeCampArticles(driver);
+        loadReflectoringArticles(driver);
+        loadAhmadShadeedArticles(driver);
+        loadCSSTricksArticles(driver);
         driver.quit();
-    }
-
-    /**
-     *
-     * @param stringDate with format like: <b>August 01, 2020</b>
-     * @return the parsed date from String to LocalDate
-     */
-    private LocalDate parseStringDateToLocalDate3(final String stringDate) {
-        final int day = Integer.parseInt(stringDate.split(" ")[1].split(",")[0]);
-        final Month month = parseStringMonthToMonthClazz(stringDate.split(" ")[0]);
-        final int year = Integer.parseInt(stringDate.split(" ")[2]);
-        return LocalDate.of(year, month, day);
-    }
-
-    /**
-     *
-     * @param stringDate with format like: <b>10th April 2022</b>
-     * @return the parsed date from String to LocalDate
-     */
-    private LocalDate parseStringDateToLocalDate2(final String stringDate) {
-        final int day = Integer.parseInt(stringDate.split(" ")[0].replaceAll("[a-z]", ""));
-        final Month month = parseStringMonthToMonthClazz(stringDate.split(" ")[1]);
-        final int year = Integer.parseInt(stringDate.split(" ")[2]);
-        return LocalDate.of(year, month, day);
-    }
-
-    /**
-     *
-     * @param stringDate with format like: <b>26 julio 2022</b>
-     * @return the parsed date from String to LocalDate
-     */
-    private LocalDate parseStringDateToLocalDate(final String stringDate) {
-        final int day = Integer.parseInt(stringDate.split(" ")[0]);
-        final Month month = parseStringMonthToMonthClazz(stringDate.split(" ")[1]);
-        final int year = Integer.parseInt(stringDate.split(" ")[2]);
-        return LocalDate.of(year, month, day);
-    }
-
-    private Month parseStringMonthToMonthClazz(final String month) {
-        final String lowerMonth = month.toLowerCase();
-
-        switch (lowerMonth) {
-            case "enero":
-            case "january":
-            case "jan":
-                return Month.JANUARY;
-            case "febrero":
-            case "february":
-            case "feb":
-                return Month.FEBRUARY;
-            case "marzo":
-            case "march":
-            case "mar":
-                return Month.MARCH;
-            case "abril":
-            case "april":
-            case "apr":
-            return Month.APRIL;
-            case "mayo":
-            case "may":
-                return Month.MAY;
-            case "junio":
-            case "june":
-            case "jun":
-                return Month.JUNE;
-            case "julio":
-            case "july":
-            case "jul":
-                return Month.JULY;
-            case "agosto":
-            case "august":
-            case "aug":
-                return Month.AUGUST;
-            case "septiembre":
-            case "september":
-            case "sept":
-            case "sep":
-                return Month.SEPTEMBER;
-            case "octubre":
-            case "october":
-            case "oct":
-                return Month.OCTOBER;
-            case "noviembre":
-            case "november":
-            case "nov":
-                return Month.NOVEMBER;
-            case "diciembre":
-            case "december":
-            case "dec":
-                return Month.DECEMBER;
-        }
-
-        return null;
     }
 
     private void loadPersonasInDB() {
@@ -176,8 +86,32 @@ class SeleniumExecutor {
                 add(Person.builder()
                         .name("web.dev")
                         .website("https://web.dev/blog/")
-                        .logo(
-                                "https://web-dev.imgix.net/image/FNkVSAX8UDTTQWQkKftSgGe9clO2/uZ3hQS2EPrA9csOgkoXI.png?auto=format&fit=max&w=1200&fm=auto")
+                        .logo("https://web-dev.imgix.net/image/FNkVSAX8UDTTQWQkKftSgGe9clO2/uZ3hQS2EPrA9csOgkoXI.png?auto=format&fit=max&w=1200&fm=auto")
+                        .build());
+                add(Person.builder()
+                        .name("freeCodeCamp")
+                        .website("https://www.freecodecamp.org/news/")
+                        .logo("https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/FreeCodeCamp_logo.png/800px-FreeCodeCamp_logo.png")
+                        .build());
+                add(Person.builder()
+                        .name("Reflectoring")
+                        .website("https://reflectoring.io/")
+                        .logo("https://reflectoring.io/images/logo_hu354e18ffd6bdfee5be8e3f497e7fb612_22876_150x0_resize_q90_h2_box_3.webp")
+                        .build());
+                add(Person.builder()
+                        .name("Ahmad Shadeed")
+                        .website("https://ishadeed.com/articles/")
+                        .logo("https://ishadeed.com/assets/shadeed.jpg")
+                        .build());
+                add(Person.builder()
+                        .name("CSS-Tricks")
+                        .website("https://css-tricks.com/archives/")
+                        .logo("https://css-tricks.com/wp-content/uploads/2019/06/akqRGyta_400x400.jpg")
+                        .build());
+                add(Person.builder()
+                        .name("Digitalocean")
+                        .website("https://www.digitalocean.com/community/tutorials")
+                        .logo("https://upload.wikimedia.org/wikipedia/commons/7/79/DigitalOcean_logo.png")
                         .build());
                 add(Person.builder()
                         .name("spring.io")
@@ -188,11 +122,6 @@ class SeleniumExecutor {
                         .name("dev.to")
                         .website("https://dev.to/t/")
                         .logo("https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png")
-                        .build());
-                add(Person.builder()
-                        .name("freeCodeCamp")
-                        .website("https://www.freecodecamp.org/news/")
-                        .logo("https://cdn.freecodecamp.org/platform/universal/fcc_primary.svg")
                         .build());
             }
         };
@@ -214,7 +143,7 @@ class SeleniumExecutor {
                 miduArticles.add(Article.builder()
                         .title(article.findElement(By.tagName("h2"))
                                 .getText())
-                        .date(parseStringDateToLocalDate(article.findElement(By.tagName("time"))
+                        .date(DateUtils.parseStringDateToLocalDate(article.findElement(By.tagName("time"))
                                 .getText()))
                         .url(article.getAttribute("href"))
                         .owner(midudev)
@@ -242,7 +171,7 @@ class SeleniumExecutor {
                 jSinclairArticles.add(Article.builder()
                         .title(article.findElement(By.tagName("h2")).findElement((By.tagName("a")))
                                 .getText())
-                        .date(parseStringDateToLocalDate2(article.findElement(By.tagName("time"))
+                        .date(DateUtils.parseStringDateToLocalDate2(article.findElement(By.tagName("time"))
                                 .getText()))
                         .url(article.findElement(By.tagName("h2")).findElement((By.tagName("a"))).getAttribute("href"))
                         .owner(jSinclair)
@@ -281,7 +210,8 @@ class SeleniumExecutor {
 
             baeldungArticles.forEach(article -> {
                 driver.get(article.getUrl());
-                article.setDate(parseStringDateToLocalDate3(driver.findElement(By.className("updated")).getText()));
+                article.setDate(
+                        DateUtils.parseStringDateToLocalDate3(driver.findElement(By.className("updated")).getText()));
             });
 
             articleService.saveAllArticles(baeldungArticles);
@@ -319,7 +249,7 @@ class SeleniumExecutor {
             nicolasArticles.forEach(article -> {
                 driver.get(article.getUrl());
                 article.setDate(
-                        parseStringDateToLocalDate3(
+                        DateUtils.parseStringDateToLocalDate3(
                                 driver.findElement(By.className("content")).findElement(By.tagName("div"))
                                         .findElement(By.tagName("div")).findElement(By.tagName("p")).getText()));
             });
@@ -351,10 +281,11 @@ class SeleniumExecutor {
                         .title(article.findElement(By.tagName("h2"))
                                 .findElement(By.tagName("a"))
                                 .getText())
-                        .date(parseStringDateToLocalDate3(article.findElement(By.className("article--post__content"))
-                                .findElement(By.className("article--post__teaser"))
-                                .findElement(By.tagName("time"))
-                                .getText()))
+                        .date(DateUtils
+                                .parseStringDateToLocalDate3(article.findElement(By.className("article--post__content"))
+                                        .findElement(By.className("article--post__teaser"))
+                                        .findElement(By.tagName("time"))
+                                        .getText()))
                         .url((article.findElement(By.tagName("h2"))
                                 .findElement(By.tagName("a"))
                                 .getAttribute("href")))
@@ -379,24 +310,24 @@ class SeleniumExecutor {
         try {
             driver.get(webDev.getWebsite());
 
-            final List<WebElement> smashingMagazineArticleList = driver
+            final List<WebElement> webDevArticleList = driver
                     .findElements(By.className("card"));
 
             for (int i = 0; i < 7; i++) {
-                final WebElement article = smashingMagazineArticleList.get(i);
+                final WebElement article = webDevArticleList.get(i);
 
                 webDevArticles.add(Article.builder()
                         .title(article.findElement(By.className("card__content"))
                                 .findElement(By.tagName("h2")).findElement(By.tagName("a"))
                                 .getText())
-                        .date(parseStringDateToLocalDate3(article.findElement(By.className("gap-top-size-1"))
+                        .date(DateUtils.parseStringDateToLocalDate3(article.findElement(By.className("gap-top-size-1"))
                                 .findElement(By.className("card__avatars"))
                                 .findElement(By.className("flow"))
                                 .findElement(By.tagName("time"))
                                 .getText()))
-                        .url((article
+                        .url(article
                                 .findElement(By.tagName("a"))
-                                .getAttribute("href")))
+                                .getAttribute("href"))
                         .owner(webDev)
                         .build());
             }
@@ -407,6 +338,145 @@ class SeleniumExecutor {
 
         } catch (final Exception e) {
             log.error("Error with SeleniumExecutor.loadWebDevArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadFreeCodeCampArticles(final WebDriver driver) {
+        final Person freeCodeCamp = personaService.getPersonByName("freeCodeCamp");
+        final List<Article> freeCodeCampArticles = new ArrayList<>();
+
+        try {
+            driver.get(freeCodeCamp.getWebsite());
+
+            final List<WebElement> freeCodeCampArticleList = driver
+                    .findElements(By.className("post-card"));
+
+            for (int i = 0; i < 7; i++) {
+                final WebElement article = freeCodeCampArticleList.get(i);
+
+                freeCodeCampArticles.add(Article.builder()
+                        .title(article.findElement(By.className("post-card-title")).getText())
+                        .date(LocalDate.now())
+                        .url(article
+                                .findElement(By.tagName("a"))
+                                .getAttribute("href"))
+                        .owner(freeCodeCamp)
+                        .build());
+            }
+
+            freeCodeCampArticles.forEach(article -> {
+                driver.get(article.getUrl());
+                article.setDate(
+                        DateUtils.parseStringDateToLocalDate3(
+                                driver.findElement(By.className("post-full-meta-date")).getText()));
+            });
+
+            articleService.saveAllArticles(freeCodeCampArticles);
+
+            log.info("ADDED ALL freeCodeCamp ARTICLES TO DATABASE");
+
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadFreeCodeCampArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadReflectoringArticles(final WebDriver driver) {
+        final Person reflectoring = personaService.getPersonByName("Reflectoring");
+        final List<Article> reflectoringArticles = new ArrayList<>();
+
+        try {
+            driver.get(reflectoring.getWebsite());
+
+            final List<WebElement> reflectoringArticleList = driver
+                    .findElements(By.className("card-body"));
+
+            for (int i = 0; i < reflectoringArticleList.size(); i++) {
+                final WebElement article = reflectoringArticleList.get(i);
+
+                reflectoringArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("h3")).findElement(By.tagName("a")).getText())
+                        .date(DateUtils.parseStringDateToLocalDate3(article.findElement(By.className(
+                                "card-meta")).findElements(By.tagName(
+                                        "li"))
+                                .get(1).getText()))
+                        .url(article.findElement(By.tagName("h3")).findElement(By.tagName("a")).getAttribute("href"))
+                        .owner(reflectoring)
+                        .build());
+            }
+
+            articleService.saveAllArticles(reflectoringArticles);
+
+            log.info("ADDED ALL Reflectoring ARTICLES TO DATABASE");
+
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadReflectoringArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadAhmadShadeedArticles(final WebDriver driver) {
+        final Person ahmadShadeed = personaService.getPersonByName("Ahmad Shadeed");
+        final List<Article> ahmadShadeedArticles = new ArrayList<>();
+
+        try {
+            driver.get(ahmadShadeed.getWebsite());
+
+            final List<WebElement> ahmadShadeedArticleList = driver
+                    .findElements(By.className("c-article"));
+
+            for (int i = 0; i < 9; i++) {
+                final WebElement article = ahmadShadeedArticleList.get(i);
+
+                ahmadShadeedArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("a")).findElement(By.tagName("h3")).getText())
+                        .date(DateUtils.parseStringDateToLocalDate(
+                                article.findElement(By.tagName("a")).findElement(By.tagName("time")).getText()))
+                        .url(article.findElement(By.tagName("a")).getAttribute("href"))
+                        .owner(ahmadShadeed)
+                        .build());
+            }
+
+            articleService.saveAllArticles(ahmadShadeedArticles);
+
+            log.info("ADDED ALL Ahmad Shadeed ARTICLES TO DATABASE");
+
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadAhmadShadeedArticles: {}",
+                    e.getMessage());
+        }
+    }
+
+    private void loadCSSTricksArticles(final WebDriver driver) {
+        final Person cssTricks = personaService.getPersonByName("CSS-Tricks");
+        final List<Article> cssTricksArticles = new ArrayList<>();
+
+        try {
+            driver.get(cssTricks.getWebsite());
+
+            final List<WebElement> cssTricksArticleList = driver
+                    .findElements(By.className("article-article"));
+
+            for (int i = 0; i < 9; i++) {
+                final WebElement article = cssTricksArticleList.get(i);
+
+                cssTricksArticles.add(Article.builder()
+                        .title(article.findElement(By.tagName("h2")).findElement(By.tagName("a")).getText())
+                        .date(DateUtils.parseStringDateToLocalDate3(
+                                article.findElement(By.className("author-row")).findElement(By.tagName("time"))
+                                        .getText()))
+                        .url(article.findElement(By.tagName("h2")).findElement(By.tagName("a")).getAttribute("href"))
+                        .owner(cssTricks)
+                        .build());
+            }
+
+            articleService.saveAllArticles(cssTricksArticles);
+
+            log.info("ADDED ALL CSSTricks ARTICLES TO DATABASE");
+
+        } catch (final Exception e) {
+            log.error("Error with SeleniumExecutor.loadCSSTricksArticles: {}",
                     e.getMessage());
         }
     }
